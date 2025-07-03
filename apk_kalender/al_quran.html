@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Quran Online - Digital Mushaf</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="css/style4.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="fas fa-book-open"></i> Al-Quran Online</h1>
+                <p>Digital Mushaf - 114 Surat dengan Terjemahan Indonesia</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari nama surat (contoh: Al-Fatihah, Yasin, dll...)">
+                <button class="search-btn" onclick="searchSurah()">
+                    <i class="fas fa-search"></i>
+                    Cari
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="content">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Memuat daftar surat...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let surahList = [];
+        let currentView = 'list';
+
+        // Load daftar surat saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSurahList();
+            
+            // Enter key untuk search
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchSurah();
+                }
+            });
+        });
+
+        async function loadSurahList() {
+            try {
+                const response = await fetch('https://api.quran.com/api/v4/chapters');
+                const data = await response.json();
+                surahList = data.chapters;
+                displaySurahList(surahList);
+            } catch (error) {
+                console.error('Error loading surah list:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Gagal memuat data</h3>
+                        <p>Silakan coba lagi nanti</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displaySurahList(surahs) {
+            const content = document.getElementById('content');
+            
+            if (surahs.length === 0) {
+                content.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>Tidak ada hasil</h3>
+                        <p>Coba kata kunci lain</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const surahGrid = surahs.map(surah => `
+                <div class="surah-card fade-in" onclick="loadSurahContent(${surah.id})">
+                    <div class="surah-header">
+                        <div class="surah-number">${surah.id}</div>
+                        <div class="surah-arabic">${surah.name_arabic}</div>
+                    </div>
+                    <div class="surah-name">${surah.name_simple}</div>
+                    <div class="surah-info">
+                        <span><i class="fas fa-map-marker-alt"></i> ${surah.revelation_place}</span>
+                        <span><i class="fas fa-list-ol"></i> ${surah.verses_count} Ayat</span>
+                    </div>
+                </div>
+            `).join('');
+
+            content.innerHTML = `<div class="surah-grid">${surahGrid}</div>`;
+            currentView = 'list';
+        }
+
+        async function loadSurahContent(surahId) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Memuat isi surat...</p>
+                </div>
+            `;
+
+            try {
+                // Load basic surah info
+                const surahResponse = await fetch(`https://api.quran.com/api/v4/chapters/${surahId}`);
+                const surahData = await surahResponse.json();
+                const surah = surahData.chapter;
+
+                // Load verses with translation
+                const versesResponse = await fetch(`https://api.quran.com/api/v4/verses/by_chapter/${surahId}?translations=33&fields=text_uthmani`);
+                const versesData = await versesResponse.json();
+
+                displaySurahContent(surah, versesData.verses);
+            } catch (error) {
+                console.error('Error loading surah content:', error);
+                content.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Gagal memuat surat</h3>
+                        <p>Silakan coba lagi</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displaySurahContent(surah, verses) {
+            const content = document.getElementById('content');
+            
+            const versesHtml = verses.map(verse => `
+                <div class="verse fade-in">
+                    <div class="verse-number">Ayat ${verse.verse_number}</div>
+                    <div class="verse-arabic">${verse.text_uthmani}</div>
+                    <div class="verse-translation">${verse.translations[0].text}</div>
+                </div>
+            `).join('');
+
+            content.innerHTML = `
+                <button class="back-btn" onclick="loadSurahList()">
+                    <i class="fas fa-arrow-left"></i>
+                    Kembali ke Daftar Surat
+                </button>
+                <div class="surah-card">
+                    <div class="surah-header">
+                        <div class="surah-number">${surah.id}</div>
+                        <div class="surah-arabic">${surah.name_arabic}</div>
+                    </div>
+                    <div class="surah-name">${surah.name_simple}</div>
+                    <div class="surah-info">
+                        <span><i class="fas fa-map-marker-alt"></i> ${surah.revelation_place}</span>
+                        <span><i class="fas fa-list-ol"></i> ${surah.verses_count} Ayat</span>
+                    </div>
+                    <div class="surah-content" style="display: block;">
+                        ${versesHtml}
+                    </div>
+                </div>
+            `;
+            currentView = 'detail';
+        }
+
+        function searchSurah() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                displaySurahList(surahList);
+                return;
+            }
+
+            const filteredSurahs = surahList.filter(surah => 
+                surah.name_simple.toLowerCase().includes(searchTerm) ||
+                surah.name_arabic.includes(searchTerm) ||
+                surah.translated_name.name.toLowerCase().includes(searchTerm)
+            );
+
+            displaySurahList(filteredSurahs);
+        }
+
+        // Reset search when clicking back
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            displaySurahList(surahList);
+        }
+    </script>
+</body>
+</html>

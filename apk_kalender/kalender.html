@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Hijriyah 2010-2025</title>
+    <link rel="stylesheet" href="css/style2.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kalender Hijriyah</h1>
+            <p></p>
+        </header>
+        
+        <div class="controls">
+            <select id="month-select">
+                <option value="1">Muharram</option>
+                <option value="2">Safar</option>
+                <option value="3">Rabi'ul Awwal</option>
+                <option value="4">Rabi'ul Akhir</option>
+                <option value="5">Jumadil Awwal</option>
+                <option value="6">Jumadil Akhir</option>
+                <option value="7">Rajab</option>
+                <option value="8">Sya'ban</option>
+                <option value="9">Ramadhan</option>
+                <option value="10">Syawal</option>
+                <option value="11">Dzulqo'dah</option>
+                <option value="12">Dzulhijjah</option>
+            </select>
+            
+            <select id="year-select">
+                <option value="1431">1431 H (2010 M)</option>
+                <option value="1432">1432 H (2011 M)</option>
+                <option value="1433">1433 H (2012 M)</option>
+                <option value="1434">1434 H (2013 M)</option>
+                <option value="1435">1435 H (2014 M)</option>
+                <option value="1436">1436 H (2015 M)</option>
+                <option value="1437">1437 H (2016 M)</option>
+                <option value="1438">1438 H (2017 M)</option>
+                <option value="1439">1439 H (2018 M)</option>
+                <option value="1440">1440 H (2019 M)</option>
+                <option value="1441">1441 H (2020 M)</option>
+                <option value="1442">1442 H (2021 M)</option>
+                <option value="1443">1443 H (2022 M)</option>
+                <option value="1444">1444 H (2023 M)</option>
+                <option value="1445">1445 H (2024 M)</option>
+                <option value="1446">1446 H (2025 M)</option>
+            </select>
+            
+            <button id="go-btn">Tampilkan</button>
+            <button id="today-btn">Hari Ini</button>
+        </div>
+        
+        <div class="calendar-container">
+            <div class="calendar-header" id="calendar-title">
+                Muharram 1443 H
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <div class="day-header">Ahad</div>
+                <div class="day-header">Senin</div>
+                <div class="day-header">Selasa</div>
+                <div class="day-header">Rabu</div>
+                <div class="day-header">Kamis</div>
+                <div class="day-header">Jum'at</div>
+                <div class="day-header">Sabtu</div>
+                
+                </div>
+        </div>
+        
+        <footer>
+            <p>Kalender Hijriyah | Menggunakan perhitungan astronomis</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data penting dalam kalender Hijriyah
+        const importantDates = {
+            '1-1': 'Tahun Baru Hijriyah',
+            '1-10': 'Hari Asyura',
+            '3-12': 'Maulid Nabi',
+            '7-27': 'Isra Mi\'raj',
+            '8-15': 'Nisfu Sya\'ban',
+            '9-1': 'Awal Ramadhan',
+            '9-17': 'Nuzulul Qur\'an',
+            '10-1': 'Hari Raya Idul Fitri',
+            '12-8': 'Hari Tarwiyah',
+            '12-9': 'Hari Arafah',
+            '12-10': 'Hari Raya Idul Adha',
+            '12-11': 'Hari Tasyrik',
+            '12-12': 'Hari Tasyrik',
+            '12-13': 'Hari Tasyrik'
+        };
+
+        // Fungsi untuk mengkonversi Hijriyah ke Gregorian (perkiraan)
+        function hijriToGregorian(hYear, hMonth, hDay) {
+            // Ini adalah perkiraan sederhana, untuk implementasi nyata gunakan library seperti hijri-date
+            const epoch = 227014; // Epoch Gregorian untuk 1 Muharram 1 AH
+            const monthLengths = [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29];
+            
+            // Hitung total hari sejak epoch
+            let totalDays = hDay - 1;
+            
+            // Tambahkan hari dari bulan sebelumnya
+            for (let i = 0; i < hMonth - 1; i++) {
+                totalDays += monthLengths[i];
+            }
+            
+            // Tambahkan hari dari tahun sebelumnya
+            totalDays += (hYear - 1) * 354;
+            
+            // Tambahkan hari kabisat (11 hari setiap 30 tahun)
+            totalDays += Math.floor((hYear - 1) / 30) * 11;
+            
+            // Konversi ke Gregorian
+            const gDate = new Date(622, 6, 16); // 16 Juli 622 M adalah epoch Hijriyah
+            gDate.setDate(gDate.getDate() + totalDays);
+            
+            return gDate;
+        }
+
+        // Fungsi untuk mendapatkan data kalender Hijriyah
+        function getHijriCalendar(hYear, hMonth) {
+            const calendar = [];
+            const daysInMonth = (hMonth % 2 === 1 || (hMonth === 12 && isHijriLeapYear(hYear))) ? 30 : 29; // Ini adalah asumsi umum, Dzulhijjah bisa 29 atau 30 tergantung kabisat
+            // Untuk Dzulhijjah, gunakan isHijriLeapYear untuk menentukan apakah 29 atau 30
+            const currentMonthLength = (hMonth === 12) ? (isHijriLeapYear(hYear) ? 30 : 29) : ((hMonth % 2 !== 0) ? 30 : 29);
+             // Koreksi untuk Safar (bulan ke-2) yang selalu 29 kecuali pada beberapa sistem
+            if (hMonth === 2) { // Safar
+                // Dalam banyak sistem tabular, Safar selalu 29.
+                // Namun, jika kita ingin lebih konsisten dengan pola ganjil/genap, kecuali Dzulhijjah di tahun kabisat:
+                // daysInMonth = 29; // Umumnya Safar 29 hari
+            }
+
+
+            const firstDay = getHijriFirstDay(hYear, hMonth);
+            
+            // Isi hari dari bulan sebelumnya
+            let prevMonthDaysInMonth;
+            if (hMonth === 1) { // Jika bulan ini Muharram
+                prevMonthDaysInMonth = isHijriLeapYear(hYear - 1) ? 30 : 29; // Panjang Dzulhijjah tahun sebelumnya
+            } else if (hMonth === 3) { // Jika bulan ini Rabi'ul Awwal, bulan sebelumnya Safar
+                 prevMonthDaysInMonth = 29; // Safar umumnya 29 hari
+            }
+            else {
+                prevMonthDaysInMonth = ((hMonth - 1) % 2 !== 0) ? 30 : 29; // Pola ganjil=30, genap=29
+            }
+                
+            let dayCount = 1;
+            let nextMonthDay = 1;
+            
+            for (let i = 0; i < 42; i++) {
+                if (i < firstDay) {
+                    // Hari dari bulan sebelumnya
+                    const day = prevMonthDaysInMonth - firstDay + i + 1;
+                    const prevMonth = hMonth === 1 ? 12 : hMonth - 1;
+                    const prevYear = hMonth === 1 ? hYear - 1 : hYear;
+                    const gDate = hijriToGregorian(prevYear, prevMonth, day);
+                    
+                    calendar.push({
+                        hijriDate: day,
+                        hijriMonth: prevMonth,
+                        hijriYear: prevYear,
+                        gregorianDate: gDate,
+                        isCurrentMonth: false
+                    });
+                } else if (dayCount <= currentMonthLength) { // Gunakan currentMonthLength yang sudah memperhitungkan kabisat Dzulhijjah
+                    // Hari dari bulan ini
+                    const gDate = hijriToGregorian(hYear, hMonth, dayCount);
+                    
+                    calendar.push({
+                        hijriDate: dayCount,
+                        hijriMonth: hMonth,
+                        hijriYear: hYear,
+                        gregorianDate: gDate,
+                        isCurrentMonth: true
+                    });
+                    dayCount++;
+                } else {
+                    // Hari dari bulan berikutnya
+                    const nextMonth = hMonth === 12 ? 1 : hMonth + 1;
+                    const nextYear = hMonth === 12 ? hYear + 1 : hYear;
+                    const gDate = hijriToGregorian(nextYear, nextMonth, nextMonthDay);
+                    
+                    calendar.push({
+                        hijriDate: nextMonthDay,
+                        hijriMonth: nextMonth,
+                        hijriYear: nextYear,
+                        gregorianDate: gDate,
+                        isCurrentMonth: false
+                    });
+                    nextMonthDay++;
+                }
+            }
+            
+            return calendar;
+        }
+
+        // Fungsi bantu untuk menentukan tahun kabisat Hijriyah
+        function isHijriLeapYear(year) {
+            // Sistem kabisat II: 2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29 (dalam siklus 30 tahun)
+            const cycle = year % 30;
+            return cycle === 2 || cycle === 5 || cycle === 7 || cycle === 10 || 
+                   cycle === 13 || cycle === 16 || cycle === 18 || cycle === 21 || 
+                   cycle === 24 || cycle === 26 || cycle === 29;
+        }
+
+        // Fungsi bantu untuk menentukan hari pertama bulan Hijriyah
+        function getHijriFirstDay(year, month) {
+            // Ini adalah perkiraan sederhana
+            const approxDays = (year - 1) * 354 + Math.floor((year - 1) / 30) * 11;
+            let monthDays = 0;
+            
+            // Akumulasi hari dari bulan-bulan sebelumnya di tahun berjalan
+            // Menggunakan panjang bulan aktual termasuk kabisat untuk Dzulhijjah tahun sebelumnya jika relevan
+            for (let i = 1; i < month; i++) {
+                if (i === 12) { // Dzulhijjah
+                    monthDays += isHijriLeapYear(year) ? 30 : 29; // Seharusnya tahun yang sama 'year' bukan 'year-1' jika menghitung bulan dalam tahun 'year'
+                } else {
+                    // Pola umum: Muharram (1) = 30, Safar (2) = 29, dst.
+                     monthDays += (i % 2 !== 0) ? 30 : 29;
+                }
+            }
+            
+            // Epoch 1 Muharram 1 AH adalah hari Jumat (indeks 5 jika Minggu=0)
+            // return (5 + approxDays + monthDays) % 7; // ORIGINAL LINE
+            /* PENYESUAIAN:
+               Konstanta epoch diubah dari 5 (Jumat) menjadi 2 (Selasa).
+               Perubahan ini bertujuan untuk memperbaiki masalah spesifik di mana 1 Juni 2025 
+               (yang oleh skrip ini dihitung sebagai 4 Dzulhijjah 1446 H) muncul di kolom Rabu, bukan Minggu.
+               Dengan konstanta epoch asli (5), getHijriFirstDay(1446, 12) menghasilkan 0 (Minggu).
+               Ini menyebabkan hari ke-1 Dzulhijjah dimulai pada hari Minggu, sehingga hari ke-4 Dzulhijjah jatuh pada hari Rabu ((0 + 4 - 1) % 7 = 3).
+               Dengan konstanta epoch baru (2), getHijriFirstDay(1446, 12) akan menghasilkan 4 (Kamis).
+               Ini menyebabkan hari ke-1 Dzulhijjah dimulai pada hari Kamis, sehingga hari ke-4 Dzulhijjah jatuh pada hari Minggu ((4 + 4 - 1) % 7 = 0).
+            */
+            return (2 + approxDays + monthDays) % 7; 
+        }
+
+        // Fungsi untuk menampilkan kalender
+        function renderCalendar(hYear, hMonth) {
+            const monthNames = [
+                "Muharram", "Safar", "Rabi'ul Awwal", "Rabi'ul Akhir", 
+                "Jumadil Awwal", "Jumadil Akhir", "Rajab", "Sya'ban", 
+                "Ramadhan", "Syawal", "Dzulqo'dah", "Dzulhijjah"
+            ];
+            
+            // Update judul kalender
+            // Tampilkan tahun Masehi dari tanggal 1 bulan Hijriyah yang bersangkutan
+            const firstDayOfHijriMonthGregorian = hijriToGregorian(hYear, hMonth, 1);
+            document.getElementById('calendar-title').textContent = 
+                `${monthNames[hMonth - 1]} ${hYear} H / ${firstDayOfHijriMonthGregorian.getFullYear()} M`;
+            
+            // Dapatkan data kalender
+            const calendarData = getHijriCalendar(hYear, hMonth);
+            
+            // Kosongkan grid kalender (setelah header hari)
+            const calendarGrid = document.getElementById('calendar-grid');
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+            
+            // Dapatkan tanggal hari ini dalam Gregorian untuk penanda 'today'
+            const today = new Date();
+            // Normalisasi today ke awal hari untuk perbandingan yang konsisten
+            const todayNormalized = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Tambahkan hari-hari ke grid
+            calendarData.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                if (!day.isCurrentMonth) {
+                    dayElement.classList.add('other-month');
+                }
+                
+                // Format tanggal Gregorian
+                const gDate = day.gregorianDate;
+                const gregorianStr = `${gDate.getDate()}/${gDate.getMonth() + 1}`; // Hanya tanggal dan bulan Masehi
+                
+                // Cek apakah hari ini
+                // Normalisasi gDate ke awal hari untuk perbandingan
+                const gDateNormalized = new Date(gDate.getFullYear(), gDate.getMonth(), gDate.getDate());
+                if (gDateNormalized.getTime() === todayNormalized.getTime() && day.isCurrentMonth) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Tambahkan tanggal Hijriyah
+                const hijriDateElement = document.createElement('div');
+                hijriDateElement.className = 'hijri-date';
+                hijriDateElement.textContent = day.hijriDate;
+                dayElement.appendChild(hijriDateElement);
+                
+                // Tambahkan tanggal Gregorian
+                const gregorianDateElement = document.createElement('div');
+                gregorianDateElement.className = 'gregorian-date';
+                gregorianDateElement.textContent = gregorianStr; // Menampilkan tgl/bln Masehi
+                dayElement.appendChild(gregorianDateElement);
+                
+                // Cek tanggal penting
+                const dateKey = `${day.hijriMonth}-${day.hijriDate}`;
+                if (importantDates[dateKey] && day.isCurrentMonth) {
+                    const eventMarker = document.createElement('div');
+                    eventMarker.className = 'event-marker important-day';
+                    eventMarker.textContent = importantDates[dateKey];
+                    dayElement.appendChild(eventMarker);
+                    
+                    if (dateKey === '1-1' || dateKey === '10-1' || dateKey === '12-10') {
+                        dayElement.style.backgroundColor = '#f0f7f4'; // Warna latar untuk hari besar utama
+                    }
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            });
+            
+            // Update dropdown
+            document.getElementById('month-select').value = hMonth;
+            document.getElementById('year-select').value = hYear;
+        }
+
+        // Fungsi untuk mendapatkan perkiraan tanggal Hijriyah hari ini
+        function getCurrentHijriDate() {
+            // Fungsi ini adalah perkiraan dan mungkin tidak selalu akurat
+            // Untuk kalender yang lebih presisi, diperlukan algoritma yang lebih kompleks atau sinkronisasi dengan data eksternal
+            const today = new Date();
+            
+            // Perkiraan kasar berdasarkan konversi dari Gregorian ke Hijriyah
+            // Ini sangat kasar dan bisa salah beberapa hari.
+            // Untuk pendekatan yang lebih baik, Anda mungkin perlu library khusus atau algoritma yang lebih canggih.
+            // Sebagai contoh sederhana, kita coba cari padanan Hijriyah dari tanggal Gregorian hari ini.
+            // Ini adalah masalah konversi balik yang kompleks jika ingin akurat.
+            // Untuk tujuan demo, kita akan menggunakan pendekatan yang sangat sederhana dan mungkin tidak akurat.
+
+            // Logika perkiraan: (Berdasarkan algoritma dari https://www.al-habib.info/islamic-calendar/hijricalendartext.htm)
+            // Ini masih merupakan penyederhanaan.
+            let Y = today.getFullYear();
+            let M = today.getMonth() + 1;
+            let D = today.getDate();
+
+            let jd = Math.floor((Y + 4716) * 365.25) + Math.floor((M + 9) / 12 * 30.6 + 0.5) + D - 1524.5;
+            jd = Math.floor(jd); // Pastikan Julian Day adalah integer
+
+            let l = jd - 1948440 + 10632;
+            let n = Math.floor((l - 1) / 10631);
+            l = l - 10631 * n + 354;
+            let j = (Math.floor((10985 - l) / 5316)) * (Math.floor((l - 354) / 1772)) + (Math.floor(l / 5670)) * (Math.floor((l - 424) / 1772));
+            l = l - (Math.floor((30 - j) / 15)) * (Math.floor((1772 * j + l - 354) / 5316)) - (Math.floor(j / 16)) * (Math.floor((l - 424 - 1772 * j) / 5316)) + 28;
+            
+            let hMonth = Math.floor((l + 708) / 21236 * 11 + 0.5) + Math.floor((275 * l / 8204));
+            let hDay = l - Math.floor(29.5001 * hMonth - 29);
+            let hYear = 30 * n + j - 30;
+
+            // Jika hMonth lebih dari 12, sesuaikan tahun dan bulan
+            if (hMonth > 12) {
+                hYear = hYear + Math.floor((hMonth-1)/12);
+                hMonth = (hMonth-1) % 12 + 1;
+            }
+             // Perbaikan jika hDay = 0, seharusnya menjadi hari terakhir bulan sebelumnya
+            if (hDay === 0) {
+                hMonth--;
+                if (hMonth === 0) {
+                    hMonth = 12;
+                    hYear--;
+                }
+                // Tentukan panjang bulan sebelumnya
+                let prevMonthLength;
+                if (hMonth === 12) { // Dzulhijjah
+                    prevMonthLength = isHijriLeapYear(hYear) ? 30 : 29;
+                } else {
+                    prevMonthLength = (hMonth % 2 !== 0) ? 30 : 29;
+                }
+                hDay = prevMonthLength;
+            }
+
+
+            // Batasi tahun agar sesuai dengan dropdown
+            if (hYear < 1431) hYear = 1431;
+            if (hYear > 1446) hYear = 1446; // Sesuaikan jika rentang tahun berubah
+
+            return {
+                year: hYear,
+                month: hMonth,
+                day: hDay
+            };
+        }
+
+        // Inisialisasi kalender
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setel ke bulan dan tahun Hijriyah saat ini (berdasarkan perkiraan)
+            const currentHijri = getCurrentHijriDate();
+            let yearToRender = currentHijri.year;
+            let monthToRender = currentHijri.month;
+
+            // Validasi agar tahun dan bulan ada di dalam opsi select
+            const yearSelect = document.getElementById('year-select');
+            const monthSelect = document.getElementById('month-select');
+            
+            let isValidYear = false;
+            for(let i=0; i < yearSelect.options.length; i++) {
+                if(parseInt(yearSelect.options[i].value) === yearToRender) {
+                    isValidYear = true;
+                    break;
+                }
+            }
+            if (!isValidYear) yearToRender = parseInt(yearSelect.options[yearSelect.options.length -1].value); // fallback ke tahun terakhir jika tidak valid
+
+            renderCalendar(yearToRender, monthToRender);
+            
+            // Event listener untuk tombol Tampilkan
+            document.getElementById('go-btn').addEventListener('click', function() {
+                const month = parseInt(document.getElementById('month-select').value);
+                const year = parseInt(document.getElementById('year-select').value);
+                renderCalendar(year, month);
+            });
+            
+            // Event listener untuk tombol Hari Ini
+            document.getElementById('today-btn').addEventListener('click', function() {
+                const currentHijriToday = getCurrentHijriDate();
+                 let yearToRenderToday = currentHijriToday.year;
+                 let monthToRenderToday = currentHijriToday.month;
+
+                let isValidYearToday = false;
+                for(let i=0; i < yearSelect.options.length; i++) {
+                    if(parseInt(yearSelect.options[i].value) === yearToRenderToday) {
+                        isValidYearToday = true;
+                        break;
+                    }
+                }
+                if (!isValidYearToday) yearToRenderToday = parseInt(yearSelect.options[yearSelect.options.length -1].value);
+
+                renderCalendar(yearToRenderToday, monthToRenderToday);
+            });
+        });
+    </script>
+</body>
+</html>

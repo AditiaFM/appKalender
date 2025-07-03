@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waktu Shalat Indonesia</title>
+    <link rel="stylesheet" href="css/style5.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="mosque-icon">🕌</div>
+            <h1>Waktu Shalat Indonesia</h1>
+            <p>Jadwal shalat untuk seluruh wilayah Indonesia dengan waktu real-time</p>
+        </div>
+
+        <div class="timezone-grid">
+            <!-- WIB -->
+            <div class="timezone-card">
+                <div class="timezone-header">
+                    <div class="timezone-name">WIB</div>
+                    <div class="current-time" id="wib-time">--:--:--</div>
+                    <div class="current-date" id="wib-date">--</div>
+                </div>
+                <div class="prayer-times" id="wib-prayers">
+                    <div class="prayer-item">
+                        <span class="prayer-name">Subuh</span>
+                        <span class="prayer-time">04:30</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Dzuhur</span>
+                        <span class="prayer-time">12:00</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Ashar</span>
+                        <span class="prayer-time">15:15</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Maghrib</span>
+                        <span class="prayer-time">18:00</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Isya</span>
+                        <span class="prayer-time">19:15</span>
+                    </div>
+                </div>
+                <div class="next-prayer">
+                    <h3>Shalat Selanjutnya</h3>
+                    <div id="wib-next">--</div>
+                    <div class="countdown" id="wib-countdown">--:--:--</div>
+                </div>
+            </div>
+
+            <!-- WITA -->
+            <div class="timezone-card">
+                <div class="timezone-header">
+                    <div class="timezone-name">WITA</div>
+                    <div class="current-time" id="wita-time">--:--:--</div>
+                    <div class="current-date" id="wita-date">--</div>
+                </div>
+                <div class="prayer-times" id="wita-prayers">
+                    <div class="prayer-item">
+                        <span class="prayer-name">Subuh</span>
+                        <span class="prayer-time">04:45</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Dzuhur</span>
+                        <span class="prayer-time">12:15</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Ashar</span>
+                        <span class="prayer-time">15:30</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Maghrib</span>
+                        <span class="prayer-time">18:15</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Isya</span>
+                        <span class="prayer-time">19:30</span>
+                    </div>
+                </div>
+                <div class="next-prayer">
+                    <h3>Shalat Selanjutnya</h3>
+                    <div id="wita-next">--</div>
+                    <div class="countdown" id="wita-countdown">--:--:--</div>
+                </div>
+            </div>
+
+            <!-- WIT -->
+            <div class="timezone-card">
+                <div class="timezone-header">
+                    <div class="timezone-name">WIT</div>
+                    <div class="current-time" id="wit-time">--:--:--</div>
+                    <div class="current-date" id="wit-date">--</div>
+                </div>
+                <div class="prayer-times" id="wit-prayers">
+                    <div class="prayer-item">
+                        <span class="prayer-name">Subuh</span>
+                        <span class="prayer-time">05:00</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Dzuhur</span>
+                        <span class="prayer-time">12:30</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Ashar</span>
+                        <span class="prayer-time">15:45</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Maghrib</span>
+                        <span class="prayer-time">18:30</span>
+                    </div>
+                    <div class="prayer-item">
+                        <span class="prayer-name">Isya</span>
+                        <span class="prayer-time">19:45</span>
+                    </div>
+                </div>
+                <div class="next-prayer">
+                    <h3>Shalat Selanjutnya</h3>
+                    <div id="wit-next">--</div>
+                    <div class="countdown" id="wit-countdown">--:--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="islamic-quote">
+            <div class="quote-text">
+                "Dan dirikanlah shalat, tunaikanlah zakat, dan ruku'lah beserta orang-orang yang ruku'"
+            </div>
+            <div class="quote-source">- Al-Baqarah: 43</div>
+        </div>
+    </div>
+
+    <script>
+        const prayerTimes = {
+            wib: [
+                { name: 'Subuh', time: '04:30' },
+                { name: 'Dzuhur', time: '12:00' },
+                { name: 'Ashar', time: '15:15' },
+                { name: 'Maghrib', time: '18:00' },
+                { name: 'Isya', time: '19:15' }
+            ],
+            wita: [
+                { name: 'Subuh', time: '04:45' },
+                { name: 'Dzuhur', time: '12:15' },
+                { name: 'Ashar', time: '15:30' },
+                { name: 'Maghrib', time: '18:15' },
+                { name: 'Isya', time: '19:30' }
+            ],
+            wit: [
+                { name: 'Subuh', time: '05:00' },
+                { name: 'Dzuhur', time: '12:30' },
+                { name: 'Ashar', time: '15:45' },
+                { name: 'Maghrib', time: '18:30' },
+                { name: 'Isya', time: '19:45' }
+            ]
+        };
+
+        const timezoneOffsets = {
+            wib: 7,
+            wita: 8,
+            wit: 9
+        };
+
+        function updateTime() {
+            const now = new Date();
+            
+            Object.keys(timezoneOffsets).forEach(zone => {
+                const offset = timezoneOffsets[zone];
+                const zoneTime = new Date(now.getTime() + (offset * 60 * 60 * 1000));
+                
+                // Update current time
+                const timeStr = zoneTime.toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZone: 'UTC'
+                });
+                document.getElementById(`${zone}-time`).textContent = timeStr;
+                
+                // Update date
+                const dateStr = zoneTime.toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    timeZone: 'UTC'
+                });
+                document.getElementById(`${zone}-date`).textContent = dateStr;
+                
+                // Highlight current prayer and calculate next prayer
+                updateCurrentPrayer(zone, zoneTime);
+            });
+        }
+
+        function updateCurrentPrayer(zone, currentTime) {
+            const prayers = prayerTimes[zone];
+            const currentHour = currentTime.getHours();
+            const currentMinute = currentTime.getMinutes();
+            const currentTimeInMinutes = currentHour * 60 + currentMinute;
+            
+            let currentPrayerIndex = -1;
+            let nextPrayerIndex = 0;
+            
+            // Convert prayer times to minutes
+            const prayerTimesInMinutes = prayers.map(prayer => {
+                const [hour, minute] = prayer.time.split(':').map(Number);
+                return hour * 60 + minute;
+            });
+            
+            // Find current and next prayer
+            for (let i = 0; i < prayerTimesInMinutes.length; i++) {
+                if (currentTimeInMinutes >= prayerTimesInMinutes[i]) {
+                    currentPrayerIndex = i;
+                } else {
+                    nextPrayerIndex = i;
+                    break;
+                }
+            }
+            
+            // If we're past all prayers, next prayer is tomorrow's Subuh
+            if (currentPrayerIndex === prayerTimesInMinutes.length - 1 && 
+                currentTimeInMinutes >= prayerTimesInMinutes[prayerTimesInMinutes.length - 1]) {
+                nextPrayerIndex = 0;
+            }
+            
+            // Highlight current prayer
+            const prayerItems = document.querySelectorAll(`#${zone}-prayers .prayer-item`);
+            prayerItems.forEach((item, index) => {
+                item.classList.remove('current');
+                if (index === currentPrayerIndex) {
+                    item.classList.add('current');
+                }
+            });
+            
+            // Update next prayer info
+            const nextPrayer = prayers[nextPrayerIndex];
+            document.getElementById(`${zone}-next`).textContent = nextPrayer.name;
+            
+            // Calculate countdown
+            let nextPrayerTime = prayerTimesInMinutes[nextPrayerIndex];
+            if (nextPrayerIndex === 0 && currentTimeInMinutes >= prayerTimesInMinutes[prayerTimesInMinutes.length - 1]) {
+                nextPrayerTime += 24 * 60; // Add 24 hours for tomorrow's Subuh
+            }
+            
+            const timeDiff = nextPrayerTime - currentTimeInMinutes;
+            const hours = Math.floor(timeDiff / 60);
+            const minutes = timeDiff % 60;
+            
+            const countdownStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${(60 - currentTime.getSeconds()).toString().padStart(2, '0')}`;
+            document.getElementById(`${zone}-countdown`).textContent = countdownStr;
+        }
+
+        // Update time every second
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Add some interactive effects
+        document.querySelectorAll('.prayer-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

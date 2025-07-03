@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelompok 9 | Apk kalender</title>
+    <link rel="stylesheet" href="css/style1.css">
+
+    <!-- Menggunakan Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>
+                    <span>Dashboard</span>
+                </h2>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-calendar-days"></i>
+                    <span><a href="kalender.html" style=" text-decoration: none; color: white;">Kalender</span></a>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-hands-praying"></i>
+                    <span><a href="doa_harian.html" style="text-decoration: none; color: white;">Doa harian</span></a>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-book-quran"></i>
+                    <span><a href="al_quran.html" style="text-decoration: none; color:white;">Al qur'an</span></a>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span><a href="peradaban islam/civilizilation.html" style="text-decoration: none; color: white;">Peradaban</span></a>
+                </div>
+                <div class="menu-item">
+                    <i class="fa-solid fa-info"></i>
+                    <span><a href="anggota_kelompok.html" style="text-decoration: none; color: white;">Anggota</span></a>
+                </div>
+                <div class="menu-item">
+                    <i class="fa-solid fa-info"></i>
+                    <span><a href="about.html" style="text-decoration: none; color: white;">Tentang</span></a>
+                </div>
+            </div>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari...">
+                </div>
+            </header>
+
+            <!-- Dashboard Cards -->
+            <section class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-value"><a href="waktu_sholat.html" style="text-decoration: none; color: black;">Waktu sholat</a></div>
+                            <div class="card-title">Waktu real time</div>
+                            <link rel="stylesheet" href="waktu_sholat.html">
+                        </div>
+                        <div class="card-icon users">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-value"><a href="populasi_muslim.html" style="text-decoration: none; color: black;">Jumlah Muslim</a></div>
+                            <div class="card-title">Total Muslim di dunia</div>
+                        </div>
+                        <div class="card-icon sales">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title"><a href="berita_1.html" style="text-decoration: none; color: black;">Psg tekuk lutut Inter Milan</a></h3>
+                    </div>
+                    <!-- Tempat untuk chart (biasanya menggunakan library seperti Chart.js) -->
+                    <div style="height: 300px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                        [Area Chart akan ditampilkan di sini]
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribusi Penjualan</h3>
+                    </div>
+                    <!-- Tempat untuk chart -->
+                    <div style="height: 300px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                        [Pie Chart akan ditampilkan di sini]
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

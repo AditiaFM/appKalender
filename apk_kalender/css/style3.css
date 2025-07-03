@@ -1,0 +1,140 @@
+:root {
+            --primary: #2c786c;
+            --secondary: #f8b400;
+            --light: #f7f7f7;
+            --dark: #004445;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .doa-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .doa-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .doa-title {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .doa-title i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        .arabic {
+            font-size: 1.8rem;
+            text-align: right;
+            line-height: 2.5;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-weight: bold;
+        }
+        
+        .latin {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: #555;
+            border-left: 3px solid var(--secondary);
+            padding-left: 15px;
+        }
+        
+        .translation {
+            background-color: #f0f7f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .translation h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .arabic {
+                font-size: 1.5rem;
+                line-height: 2;
+            }
+            
+            .doa-card {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .arabic {
+                font-size: 1.3rem;
+            }
+            
+            .doa-title {
+                font-size: 1.3rem;
+            }
+        }
